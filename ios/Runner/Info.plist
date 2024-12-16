@@ -12,6 +12,10 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+    <key>NSCameraUsageDescription</key>
+    <string>We need access to your camera for this feature.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>We need access to your microphone for this feature.</string>
 	<key>CFBundleName</key>
 	<string>flutter_core</string>
 	<key>CFBundlePackageType</key>
