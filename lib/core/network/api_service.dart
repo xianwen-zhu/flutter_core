@@ -6,6 +6,7 @@
 import 'package:dio/dio.dart';
 import '../utils/storage.dart';
 import 'api_exceptions.dart';
+import 'api_interceptors.dart';
 
 typedef SuccessCallback = void Function(dynamic data);
 typedef ErrorCallback = void Function(String error);
@@ -25,7 +26,11 @@ class ApiService {
       headers: {
         'Content-Type': 'application/json',
       },
+
     ));
+
+    // 添加自定义拦截器
+    _dio.interceptors.add(ApiInterceptors());
   }
 
   /// 处理请求头

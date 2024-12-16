@@ -5,7 +5,7 @@
 
 
 class ApiEndpoints {
-  static const String login = '/auth/login';
+  static const String login = '/auth/token';
   static const String register = '/auth/register';
   static const String getUserProfile = '/user/profile';
   static const String updateUserProfile = '/user/update';
