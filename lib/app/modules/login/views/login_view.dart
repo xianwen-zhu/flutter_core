@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_core/core/widgets/base_button.dart';
+import 'package:flutter_core/core/widgets/base_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../controllers/login_controller.dart';
+import '../../../../core/widgets/base_text_field.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});
@@ -45,10 +48,11 @@ class LoginView extends StatelessWidget {
                       style: AppTextStyles.bodyPrimary,
                     ),
                     SizedBox(height: 32.sp),
-                    _buildTextField(
+                    // 使用BaseTextField代替TextFormField
+                    BaseTextField(
                       controller: controller.usernameController,
-                      label: 'Username',
-                      prefixIcon: const Icon(Icons.person),
+                      labelText: 'Username',
+                      prefixIcon:  Icons.person,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your username';
@@ -59,11 +63,11 @@ class LoginView extends StatelessWidget {
                       },
                     ),
                     SizedBox(height: 16.sp),
-                    _buildTextField(
+                    BaseTextField(
                       controller: controller.passwordController,
-                      label: 'Password',
-                      prefixIcon: const Icon(Icons.lock),
-                      obscureText: true,
+                      labelText: 'Password',
+                      isPassword:true,
+                      prefixIcon: Icons.lock,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
@@ -76,21 +80,21 @@ class LoginView extends StatelessWidget {
                     SizedBox(height: 24.sp),
                     SizedBox(
                       width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.primary,
-                          padding: EdgeInsets.symmetric(vertical: 14.sp),
-                          textStyle: AppTextStyles.button,
-                        ),
-                        onPressed: controller.login, // 调用控制器中的登录逻辑
-                        child: const Text('Sign In'),
+                      child: BaseButton(
+                        text: 'Sign In',
+                        height: 48.sp,
+                        borderRadius: 24.sp,
+                        horizontalMargin: 10.sp,
+                        onPressed: ()=>{
+                          controller.login()
+                        },
                       ),
                     ),
                     SizedBox(height: 16.sp),
                     Center(
                       child: TextButton(
                         onPressed: () {
-                          Get.snackbar('Notice', 'Forgot Password Clicked');
+
                         },
                         child: Text(
                           'Forgot Password?',
@@ -105,33 +109,6 @@ class LoginView extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    Icon? prefixIcon,
-    bool obscureText = false,
-    String? Function(String?)? validator,
-  }) {
-    return TextFormField(
-      controller: controller,
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: AppTextStyles.placeholder,
-        border: const OutlineInputBorder(),
-        prefixIcon: prefixIcon,
-        suffixIcon: controller.text.isNotEmpty
-            ? IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: () => controller.clear(),
-              )
-            : null,
-      ),
-      style: AppTextStyles.input,
-      validator: validator,
     );
   }
 }

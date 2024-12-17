@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_core/core/theme/colors.dart';
 import 'package:flutter_core/core/theme/text_styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:get/get.dart';
 
+import '../../../../core/widgets/base_app_bar_page.dart';
+import '../../../../core/widgets/base_button.dart';
 import '../controllers/profile_settings_controller.dart';
 
 class ProfileSettingsView extends GetView<ProfileSettingsController> {
@@ -12,22 +12,13 @@ class ProfileSettingsView extends GetView<ProfileSettingsController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Settings',
-          style: AppTextStyles.appBarTitle,
-        ),
-        backgroundColor: Colors.white,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Get.back(),
-        ),
-      ),
-      backgroundColor: AppColors.background,
+    return BaseAppBarPage(
+      title: 'Settings', // 页面标题
+      showBackButton: true, // 显示返回按钮
+      onBackPressed: () => Get.back(), // 自定义返回逻辑
       body: Column(
         children: [
+          // 菜单项
           _buildMenuItem(
             icon: Icons.exit_to_app,
             title: 'Deactivate Account',
@@ -43,45 +34,51 @@ class ProfileSettingsView extends GetView<ProfileSettingsController> {
               // Get.toNamed(Routes.ABOUT_PAGE);
             },
           ),
-           Divider(height: 1.sp),
+          Divider(height: 1.sp),
           const Spacer(),
-          _buildLogoutButton(context: context,
-            content: 'Are you sure you want to log out?',),
-           SizedBox(height: 40.0.sp),
+          // 登出按钮
+          _buildLogoutButton(
+            context: context,
+            content: 'Are you sure you want to log out?',
+          ),
+          SizedBox(height: 40.0.sp),
         ],
       ),
     );
   }
 
+  /// 构建菜单项
   Widget _buildMenuItem(
       {required IconData icon,
-      required String title,
-      required VoidCallback onTap}) {
+        required String title,
+        required VoidCallback onTap}) {
     return ListTile(
       leading: Icon(icon, color: Colors.blue),
-      title: Text(title),
+      title: Text(
+        title,
+        style: AppTextStyles.bodyPrimary,
+      ),
       trailing: Icon(Icons.chevron_right, color: Colors.grey),
       onTap: onTap,
     );
   }
 
-  Widget _buildLogoutButton(
-      {required BuildContext context, required String content}) {
-    return Center(
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          padding:
-               EdgeInsets.symmetric(horizontal: 100.0.sp, vertical: 12.0.sp),
-          backgroundColor: Colors.red,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(24.0.sp),
-          ),
-        ),
-        onPressed: () {
-          controller.logout(context);
-        },
-        child: const Text('Logout', style: TextStyle(color: Colors.white)),
-      ),
+  /// 构建登出按钮
+  Widget _buildLogoutButton({
+    required BuildContext context,
+    required String content,
+  }) {
+    return BaseButton(
+      text: 'Logout',
+      type: ButtonType.elevated, // 填充按钮
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      borderRadius: 24.0.sp, // 圆角
+      height: 48.0.sp, // 按钮高度
+      isLoading: false, // 非加载状态
+      onPressed: () {
+        controller.logout(context);
+      },
     );
   }
 }

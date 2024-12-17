@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_core/app/modules/profile/views/profile_view.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../core/utils/permissionManager.dart';
+import '../../main/views/main_view.dart';
 
 class HomeController extends GetxController {
   var selectedIndex = 0.obs;
 
   final List<Widget> widgetOptions = [
     // 页面内容示例
-    Center(child: Text('Home')),
+    MainView(),
     Center(child: Text('Assets')),
     Center(child: Text('Operations')),
-    Center(child: Text('Profile')),
+    ProfileView()
   ];
 
   /// 切换页面方法
