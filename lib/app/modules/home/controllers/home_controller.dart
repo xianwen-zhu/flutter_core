@@ -3,12 +3,58 @@ import 'package:flutter_core/app/modules/profile/views/profile_view.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../../../core/network/network_monitor.dart';
 import '../../../../core/utils/permissionManager.dart';
 import '../../main/views/main_view.dart';
 import '../../maintenance/views/maintenance_view.dart';
 
 class HomeController extends GetxController {
   var selectedIndex = 0.obs;
+
+
+  var isNetworkConnected = true.obs; // 网络状态观察变量
+
+  @override
+  void onInit() {
+    super.onInit();
+    _subscribeToNetworkStatus();
+  }
+
+  void _subscribeToNetworkStatus() {
+    NetworkMonitor().subscribeToNetworkStatus((status) {
+      if (status == NetworkStatus.disconnected) {
+        isNetworkConnected.value = false; // 无网络连接
+        _showNetworkErrorDialog();
+      } else {
+        isNetworkConnected.value = true; // 恢复网络连接
+      }
+    });
+  }
+
+  void _showNetworkErrorDialog() {
+    Get.dialog(
+      AlertDialog(
+        title: Text('Network Error'),
+        content: Text('No internet connection. Please check your network.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back(); // 关闭弹窗
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+      barrierDismissible: false, // 禁止点击外部关闭
+    );
+  }
+
+  @override
+  void onClose() {
+    NetworkMonitor().dispose(); // 释放监听资源
+    super.onClose();
+  }
+
 
   final List<Widget> widgetOptions = [
     // 页面内容示例

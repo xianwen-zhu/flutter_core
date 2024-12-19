@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import '../../../../core/utils/eventManager.dart';
 import '../../../routes/app_pages.dart';
 
 class ProfileSettingsController extends GetxController {
@@ -23,7 +24,6 @@ class ProfileSettingsController extends GetxController {
     super.onClose();
   }
 
-  /// Confirm and handle logout using AwesomeDialog
   void logout(BuildContext context) {
     AwesomeDialog(
       context: context,
@@ -59,12 +59,13 @@ class ProfileSettingsController extends GetxController {
       btnOkText: "Confirm",
     ).show();
   }
-
-  /// Perform the actual logout operation
+  
   void _performLogout() {
-    UserManager().clearUserData(); // Clear user data
+    //清空用户数据
+    UserManager().clearUserData();
+    //清空有所的订阅事件
+    EventManager.instance.unsubscribeAll();
 
-    // Show logout success toast
     Fluttertoast.showToast(
       msg: "You have been logged out.",
       toastLength: Toast.LENGTH_SHORT,

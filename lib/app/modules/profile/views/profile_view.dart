@@ -71,12 +71,12 @@ class ProfileView extends GetView<ProfileController> {
             children: [
               Text(
                 "--",
-                style: AppTextStyles.bodyPrimary
+                style: AppTextStyles.bodySmall
               ),
                SizedBox(height: 4.0.sp),
               Text(
                 "--",
-                style: AppTextStyles.bodyPrimary,
+                style: AppTextStyles.bodySmall,
               ),
                SizedBox(height: 4.0.sp),
             ],

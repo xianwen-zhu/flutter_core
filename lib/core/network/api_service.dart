@@ -5,7 +5,6 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter_core/core/services/user_manager.dart';
-import '../utils/storage.dart';
 import 'api_exceptions.dart';
 import 'api_interceptors.dart';
 
@@ -15,24 +14,27 @@ typedef ErrorCallback = void Function(String error);
 class ApiService {
   static final ApiService _instance = ApiService._internal();
 
-  factory ApiService() => _instance;
+  late final Dio _dio;
 
-  late Dio _dio;
-
+  // 私有构造方法
   ApiService._internal() {
-    _dio = Dio(BaseOptions(
-      baseUrl: 'https://dev.rokyinfo.net:20999', // 基础接口地址
-      connectTimeout: const Duration(milliseconds: 5000),
-      receiveTimeout: const Duration(milliseconds: 5000),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-
-    ));
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: 'https://dev.rokyinfo.net:20999', // 基础接口地址
+        connectTimeout: const Duration(milliseconds: 5000),
+        receiveTimeout: const Duration(milliseconds: 5000),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
 
     // 添加自定义拦截器
     _dio.interceptors.add(ApiInterceptors());
   }
+
+  // 获取单例实例
+  static ApiService get instance => _instance;
 
   /// 处理请求头
   Future<void> _prepareHeaders(bool requiresToken) async {
@@ -68,71 +70,71 @@ class ApiService {
   }
 
   /// GET 请求
-  Future<void> get(
+  static Future<void> get(
       String path, {
         Map<String, dynamic>? queryParameters,
         bool requiresToken = false,
         required SuccessCallback onSuccess,
         required ErrorCallback onError,
       }) async {
-    await _prepareHeaders(requiresToken);
-    await _handleRequest(
-          () => _dio.get(path, queryParameters: queryParameters), // 具体的 GET 请求
+    await _instance._prepareHeaders(requiresToken);
+    await _instance._handleRequest(
+          () => _instance._dio.get(path, queryParameters: queryParameters), // 具体的 GET 请求
       onSuccess,
       onError,
     );
   }
 
   /// POST 请求
-  Future<void> post(
+  static Future<void> post(
       String path, {
         Map<String, dynamic>? data,
         bool requiresToken = false,
         required SuccessCallback onSuccess,
         required ErrorCallback onError,
       }) async {
-    await _prepareHeaders(requiresToken);
-    await _handleRequest(
-          () => _dio.post(path, data: data), // 具体的 POST 请求
+    await _instance._prepareHeaders(requiresToken);
+    await _instance._handleRequest(
+          () => _instance._dio.post(path, data: data), // 具体的 POST 请求
       onSuccess,
       onError,
     );
   }
 
   /// PUT 请求
-  Future<void> put(
+  static Future<void> put(
       String path, {
         Map<String, dynamic>? data,
         bool requiresToken = false,
         required SuccessCallback onSuccess,
         required ErrorCallback onError,
       }) async {
-    await _prepareHeaders(requiresToken);
-    await _handleRequest(
-          () => _dio.put(path, data: data), // 具体的 PUT 请求
+    await _instance._prepareHeaders(requiresToken);
+    await _instance._handleRequest(
+          () => _instance._dio.put(path, data: data), // 具体的 PUT 请求
       onSuccess,
       onError,
     );
   }
 
   /// DELETE 请求
-  Future<void> delete(
+  static Future<void> delete(
       String path, {
         Map<String, dynamic>? data,
         bool requiresToken = false,
         required SuccessCallback onSuccess,
         required ErrorCallback onError,
       }) async {
-    await _prepareHeaders(requiresToken);
-    await _handleRequest(
-          () => _dio.delete(path, data: data), // 具体的 DELETE 请求
+    await _instance._prepareHeaders(requiresToken);
+    await _instance._handleRequest(
+          () => _instance._dio.delete(path, data: data), // 具体的 DELETE 请求
       onSuccess,
       onError,
     );
   }
 
   /// 文件上传
-  Future<void> uploadFile(
+  static Future<void> uploadFile(
       String path,
       String filePath, {
         Map<String, dynamic>? data,
@@ -140,29 +142,29 @@ class ApiService {
         required SuccessCallback onSuccess,
         required ErrorCallback onError,
       }) async {
-    await _prepareHeaders(requiresToken);
+    await _instance._prepareHeaders(requiresToken);
     final formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(filePath),
       ...?data,
     });
-    await _handleRequest(
-          () => _dio.post(path, data: formData), // 文件上传 POST 请求
+    await _instance._handleRequest(
+          () => _instance._dio.post(path, data: formData), // 文件上传 POST 请求
       onSuccess,
       onError,
     );
   }
 
   /// 文件下载
-  Future<void> downloadFile(
+  static Future<void> downloadFile(
       String url,
       String savePath, {
         bool requiresToken = false,
         required SuccessCallback onSuccess,
         required ErrorCallback onError,
       }) async {
-    await _prepareHeaders(requiresToken);
+    await _instance._prepareHeaders(requiresToken);
     try {
-      await _dio.download(url, savePath);
+      await _instance._dio.download(url, savePath);
       onSuccess('File downloaded successfully'); // 成功回调
     } on DioException catch (e) {
       final errorMessage = ApiExceptions.handleError(e);

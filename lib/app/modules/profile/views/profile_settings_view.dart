@@ -56,7 +56,7 @@ class ProfileSettingsView extends GetView<ProfileSettingsController> {
       leading: Icon(icon, color: Colors.blue),
       title: Text(
         title,
-        style: AppTextStyles.bodyPrimary,
+        style: AppTextStyles.bodySmall,
       ),
       trailing: Icon(Icons.chevron_right, color: Colors.grey),
       onTap: onTap,

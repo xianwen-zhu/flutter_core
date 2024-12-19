@@ -72,7 +72,7 @@ class LoginView extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             'Login',
-            style: AppTextStyles.bodyPrimary,
+            style: AppTextStyles.bodyLarge,
           ),
           centerTitle: true,
           backgroundColor: AppColors.primary,
@@ -93,7 +93,7 @@ class LoginView extends StatelessWidget {
                     SizedBox(height: 8.sp),
                     Text(
                       'Please sign in to continue',
-                      style: AppTextStyles.bodyPrimary,
+                      style: AppTextStyles.bodyMedium,
                     ),
                     SizedBox(height: 32.sp),
                     // 使用BaseTextField代替TextFormField

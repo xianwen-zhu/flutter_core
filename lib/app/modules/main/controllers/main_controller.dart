@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import '../../../../core/network/api_endpoints.dart';
 import '../../../../core/network/api_service.dart';
 
+
+
 class MainController extends GetxController {
   // 日志数据状态
   late RxMap<String, int> swapLogData;
@@ -62,9 +64,9 @@ class MainController extends GetxController {
   }
 
   /// 统一 API 请求方法
-  Future<Map<String, dynamic>> _apiRequest(String path, Map<String, dynamic> queryParams) async {
-    late Map<String, dynamic> responseData;
-    await ApiService().get(
+  Future<dynamic> _apiRequest(String path, Map<String, dynamic> queryParams) async {
+    late dynamic responseData;
+    await ApiService.get(
       path,
       queryParameters: queryParams,
       requiresToken: true,
@@ -79,10 +81,11 @@ class MainController extends GetxController {
   }
 
   /// 转换日志数据并更新状态
-  void _updateLogData(RxMap<String, int> logData, Map<String, dynamic> data, {String? key}) {
-    if (key != null) {
-      logData[key] = data[key.toUpperCase()]?['count'] ?? 0;
+  void _updateLogData(RxMap<String, int> logData, dynamic data, {String? key}) {
+    if (key == 'faultLog') {
+      logData[key!] = data is int ? data : 0;
     } else {
+      // 解析其他日志数据
       logData.value = {
         'successLog': data['TODAY_HANDLE_SUCCESS']?['count'] ?? 0,
         'failedLog': data['TODAY_HANDLE_FAIL']?['count'] ?? 0,
@@ -90,7 +93,6 @@ class MainController extends GetxController {
         'alertLog': data['WARNING_LOG']?['count'] ?? 0,
       };
     }
-
   }
 
   /// 设置加载状态
