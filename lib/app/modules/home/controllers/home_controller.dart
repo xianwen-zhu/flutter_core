@@ -5,6 +5,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../core/utils/permissionManager.dart';
 import '../../main/views/main_view.dart';
+import '../../maintenance/views/maintenance_view.dart';
 
 class HomeController extends GetxController {
   var selectedIndex = 0.obs;
@@ -13,7 +14,7 @@ class HomeController extends GetxController {
     // 页面内容示例
     MainView(),
     Center(child: Text('Assets')),
-    Center(child: Text('Operations')),
+    MaintenanceView(),
     ProfileView()
   ];
 

@@ -6,9 +6,6 @@
 
 class ApiEndpoints {
   static const String login = '/auth/token';
-  static const String register = '/auth/register';
-  static const String getUserProfile = '/user/profile';
-  static const String updateUserProfile = '/user/update';
-  static const String uploadFile = '/file/upload';
-  static const String downloadFile = '/file/download';
+  static const String getLogs = '/api-ebike/v3.1/cabinet-tasks/queryCabinetTaskStatisticDtoMap';
+  static const String getFaultLogs = '/api-ebike/cabinetLog/queryFaultCabinetTaskLogsCount';
 }

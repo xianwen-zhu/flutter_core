@@ -105,7 +105,7 @@ class AppTextStyles {
 
   // 导航栏标题样式：适用于 AppBar 的标题
   static final TextStyle appBarTitle = TextStyle(
-    fontSize: 20.sp,
+    fontSize: 18.sp,
     fontWeight: FontWeight.bold,
     color: AppColors.textPrimary,
   );

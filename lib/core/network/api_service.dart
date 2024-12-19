@@ -4,6 +4,7 @@
 /// @brief [请求框架类]
 
 import 'package:dio/dio.dart';
+import 'package:flutter_core/core/services/user_manager.dart';
 import '../utils/storage.dart';
 import 'api_exceptions.dart';
 import 'api_interceptors.dart';
@@ -36,7 +37,7 @@ class ApiService {
   /// 处理请求头
   Future<void> _prepareHeaders(bool requiresToken) async {
     if (requiresToken) {
-      final token = await Storage.getString('auth_token'); // 获取 Token
+      final token = await UserManager().token; // 获取 Token
       if (token != null) {
         _dio.options.headers['Authorization'] = 'Bearer $token';
       }

@@ -35,27 +35,27 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.MAIN,
-      page: () => const MainView(),
+      page: () =>  MainView(),
       binding: MainBinding(),
     ),
     GetPage(
       name: _Paths.ASSETS,
-      page: () => const AssetsView(),
+      page: () =>  AssetsView(),
       binding: AssetsBinding(),
     ),
     GetPage(
       name: _Paths.MAINTENANCE,
-      page: () => const MaintenanceView(),
+      page: () =>  MaintenanceView(),
       binding: MaintenanceBinding(),
     ),
     GetPage(
       name: _Paths.PROFILE,
-      page: () => const ProfileView(),
+      page: () =>  ProfileView(),
       binding: ProfileBinding(),
     ),
     GetPage(
       name: _Paths.PROFILE_SETTINGS,
-      page: () => const ProfileSettingsView(),
+      page: () =>  ProfileSettingsView(),
       binding: ProfileSettingsBinding(),
     ),
   ];

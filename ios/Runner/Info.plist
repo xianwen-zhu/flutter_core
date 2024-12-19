@@ -18,6 +18,11 @@
     <string>We need access to your microphone for this feature.</string>
 	<key>CFBundleName</key>
 	<string>flutter_core</string>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>baidumap</string>
+        <string>iosamap</string>
+    </array>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>

@@ -7,11 +7,59 @@ import '../../../../core/theme/colors.dart';
 import '../../../../core/theme/text_styles.dart';
 import '../controllers/login_controller.dart';
 import '../../../../core/widgets/base_text_field.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});
 
   final LoginController controller = Get.put(LoginController());
+
+  /// 跳转高德地图方法
+  Future<void> launchAMap({
+    required double longitude, // 经度
+    required double latitude, // 纬度
+    String? name, // 可选的地名
+  }) async {
+    // 高德地图的 URL Scheme 格式
+    final String aMapUrl;
+
+    if (Theme.of(Get.context!).platform == TargetPlatform.iOS) {
+      // iOS 平台的 URL Scheme
+      aMapUrl =
+      'iosamap://path?sourceApplication=yourAppName&dlat=$latitude&dlon=$longitude&dev=0&t=0${name != null ? '&dname=$name' : ''}';
+    } else if (Theme.of(Get.context!).platform == TargetPlatform.android) {
+      // Android 平台的 URL Scheme
+      aMapUrl =
+      'amapuri://route/plan/?sourceApplication=yourAppName&dlat=$latitude&dlon=$longitude&dev=0&t=0${name != null ? '&dname=$name' : ''}';
+    } else {
+      // 不支持的平台
+      throw UnsupportedError('Unsupported platform');
+    }
+
+    // 检查高德地图是否安装
+    if (await canLaunchUrl(Uri.parse(aMapUrl))) {
+      // 打开高德地图
+      await launchUrl(Uri.parse(aMapUrl), mode: LaunchMode.externalApplication);
+    } else {
+      // 如果未安装高德地图，则提供安装地址（App Store 或应用市场）
+      if (Theme.of(Get.context!).platform == TargetPlatform.iOS) {
+        final fallbackUrl =
+            'https://apps.apple.com/cn/app/id461703208'; // 高德地图 iOS App Store 地址
+        await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
+      } else if (Theme.of(Get.context!).platform == TargetPlatform.android) {
+        final fallbackUrl =
+            'market://details?id=com.autonavi.minimap'; // 高德地图 Android 应用市场地址
+        if (await canLaunchUrl(Uri.parse(fallbackUrl))) {
+          await launchUrl(Uri.parse(fallbackUrl), mode: LaunchMode.externalApplication);
+        } else {
+          debugPrint('Unable to open AMap or Play Store.');
+        }
+      } else {
+        debugPrint('AMap is not supported on this platform.');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +142,7 @@ class LoginView extends StatelessWidget {
                     Center(
                       child: TextButton(
                         onPressed: () {
-
+                          launchAMap(latitude:121.433207 ,longitude:31.290457 );
                         },
                         child: Text(
                           'Forgot Password?',
