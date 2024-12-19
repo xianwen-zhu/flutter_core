@@ -7,6 +7,7 @@ import 'core/initializer/app_initializer.dart';
 import 'core/network/network_monitor.dart';
 import 'core/services/user_manager.dart';
 import 'core/theme/theme.dart';
+import 'core/utils/task_scheduler.dart';
 
 Future<void> main() async {
 

@@ -59,7 +59,7 @@ class ProfileSettingsController extends GetxController {
       btnOkText: "Confirm",
     ).show();
   }
-  
+
   void _performLogout() {
     //清空用户数据
     UserManager().clearUserData();
