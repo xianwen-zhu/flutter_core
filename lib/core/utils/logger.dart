@@ -1,7 +1,7 @@
 /// @file logger.dart
 /// @date 2024/12/19
 /// @author zhuxianwen
-/// @brief [支持 日志等级、文件保存、调试模式打印]
+/// @brief [支持日志等级、文件保存、调试模式打印，优化打印格式]
 
 import 'dart:io';
 import 'package:flutter/foundation.dart'; // 用于检测调试模式
@@ -29,7 +29,10 @@ class Logger {
   LogLevel _logLevel = LogLevel.debug; // 默认日志等级
 
   /// 初始化日志系统
-  static Future<void> init({bool enableFileLogging = false, LogLevel logLevel = LogLevel.debug}) async {
+  static Future<void> init({
+    bool enableFileLogging = false,
+    LogLevel logLevel = LogLevel.debug,
+  }) async {
     _instance._enableFileLogging = enableFileLogging;
     _instance._logLevel = logLevel;
 
@@ -47,58 +50,61 @@ class Logger {
   }
 
   /// 打印 debug 日志
-  static void debug(String message, [dynamic error, StackTrace? stackTrace]) {
-    _instance._log(LogLevel.debug, message, error, stackTrace);
+  static void debug(String message, {String? tag, dynamic error, StackTrace? stackTrace}) {
+    _instance._log(LogLevel.debug, message, tag: tag, error: error, stackTrace: stackTrace);
   }
 
   /// 打印 info 日志
-  static void info(String message, [dynamic error, StackTrace? stackTrace]) {
-    _instance._log(LogLevel.info, message, error, stackTrace);
+  static void info(String message, {String? tag, dynamic error, StackTrace? stackTrace}) {
+    _instance._log(LogLevel.info, message, tag: tag, error: error, stackTrace: stackTrace);
   }
 
   /// 打印 warn 日志
-  static void warn(String message, [dynamic error, StackTrace? stackTrace]) {
-    _instance._log(LogLevel.warn, message, error, stackTrace);
+  static void warn(String message, {String? tag, dynamic error, StackTrace? stackTrace}) {
+    _instance._log(LogLevel.warn, message, tag: tag, error: error, stackTrace: stackTrace);
   }
 
   /// 打印 error 日志
-  static void error(String message, [dynamic error, StackTrace? stackTrace]) {
-    _instance._log(LogLevel.error, message, error, stackTrace);
+  static void error(String message, {String? tag, dynamic error, StackTrace? stackTrace}) {
+    _instance._log(LogLevel.error, message, tag: tag, error: error, stackTrace: stackTrace);
   }
 
   /// 通用日志方法
-  void _log(LogLevel level, String message, [dynamic error, StackTrace? stackTrace]) {
+  void _log(LogLevel level, String message, {String? tag, dynamic error, StackTrace? stackTrace}) {
     // 检查日志等级
     if (level.index < _logLevel.index) return;
 
     final timestamp = DateTime.now().toIso8601String();
-    final logMessage = '[$timestamp] [${level.name.toUpperCase()}]: $message';
+    final logMessage = '''
+    ======================================
+    🕒 Timestamp: $timestamp
+    🏷️ Tag: ${tag ?? "GENERAL"}
+    🔹 Level: ${level.name.toUpperCase()}
+    💬 Message: $message
+    ${error != null ? '❌ Error: $error' : ''}
+    ${stackTrace != null ? '🔍 StackTrace:\n$stackTrace' : ''}
+    ======================================
+    ''';
 
     // 在调试模式下打印到控制台
     if (kDebugMode) {
       print(logMessage);
-      if (error != null) print('Error: $error');
-      if (stackTrace != null) print('StackTrace: $stackTrace');
     }
 
     // 如果启用了文件日志，则写入文件
     if (_enableFileLogging && _isInitialized) {
-      _writeToFile(logMessage, error, stackTrace);
+      _writeToFile(logMessage);
     }
   }
 
   /// 写入日志文件
-  Future<void> _writeToFile(String message, [dynamic error, StackTrace? stackTrace]) async {
-    final errorDetails = error != null ? '\nError: $error' : '';
-    final stackTraceDetails = stackTrace != null ? '\nStackTrace: $stackTrace' : '';
-
+  Future<void> _writeToFile(String message) async {
     try {
-      await _logFile.writeAsString(
-        '$message$errorDetails$stackTraceDetails\n',
-        mode: FileMode.append,
-      );
+      await _logFile.writeAsString('$message\n', mode: FileMode.append);
     } catch (e) {
-      print('Failed to write log to file: $e');
+      if (kDebugMode) {
+        print('Failed to write log to file: $e');
+      }
     }
   }
 

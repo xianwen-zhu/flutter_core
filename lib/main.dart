@@ -16,9 +16,8 @@ Future<void> main() async {
 
   await AppInitializer.initialize(); // 初始化应用
 
-
   // 检查用户登录状态
-  final isLoggedIn = await UserManager().isLoggedIn;
+  final  isLoggedIn = await UserManager().isLoggedIn;
 
   // 设置初始路由
   runApp(MyApp(initialRoute: isLoggedIn ? Routes.HOME : Routes.LOGIN));
