@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_core/core/theme/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import '../../../../core/network/network_monitor.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {

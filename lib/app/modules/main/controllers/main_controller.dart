@@ -40,12 +40,12 @@ class MainController extends GetxController {
     _setLoadingState(true);
     try {
       final requests = [
-        {'path': ApiEndpoints.getLogs, 'query': {'action': '5'}, 'target': swapLogData},
-        {'path': ApiEndpoints.getLogs, 'query': {'action': '12,13'}, 'target': registerLogData},
-        {'path': ApiEndpoints.getLogs, 'query': {'action': '8,9'}, 'target': leaseLogData},
-        {'path': ApiEndpoints.getFaultLogs, 'query': {'optionType': '5'}, 'target': swapLogData, 'key': 'faultLog'},
-        {'path': ApiEndpoints.getFaultLogs, 'query': {'optionType': '12,13'}, 'target': registerLogData, 'key': 'faultLog'},
-        {'path': ApiEndpoints.getFaultLogs, 'query': {'optionType': '8,9'}, 'target': leaseLogData, 'key': 'faultLog'},
+        {'path': ApiEndpoints.getLogs, 'query': {'action': '5','storeId':'21907'}, 'target': swapLogData},
+        {'path': ApiEndpoints.getLogs, 'query': {'action': '12,13','storeId':'21907'}, 'target': registerLogData},
+        {'path': ApiEndpoints.getLogs, 'query': {'action': '8,9','storeId':'21907'}, 'target': leaseLogData},
+        {'path': ApiEndpoints.getFaultLogs, 'query': {'optionType': '5','storeId':'21907'}, 'target': swapLogData, 'key': 'faultLog'},
+        {'path': ApiEndpoints.getFaultLogs, 'query': {'optionType': '12,13','storeId':'21907'}, 'target': registerLogData, 'key': 'faultLog'},
+        {'path': ApiEndpoints.getFaultLogs, 'query': {'optionType': '8,9','storeId':'21907'}, 'target': leaseLogData, 'key': 'faultLog'},
       ];
 
       for (final request in requests) {
@@ -66,7 +66,7 @@ class MainController extends GetxController {
   /// 统一 API 请求方法
   Future<dynamic> _apiRequest(String path, Map<String, dynamic> queryParams) async {
     late dynamic responseData;
-    await ApiService.get(
+    await ApiService().get(
       path,
       queryParameters: queryParams,
       requiresToken: true,
@@ -89,7 +89,6 @@ class MainController extends GetxController {
       logData.value = {
         'successLog': data['TODAY_HANDLE_SUCCESS']?['count'] ?? 0,
         'failedLog': data['TODAY_HANDLE_FAIL']?['count'] ?? 0,
-        'faultLog': data['FAULT_LOG']?['count'] ?? 0,
         'alertLog': data['WARNING_LOG']?['count'] ?? 0,
       };
     }

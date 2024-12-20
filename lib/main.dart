@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'app/routes/app_pages.dart';
+import 'core/config/environment.dart';
 import 'core/initializer/app_initializer.dart';
 import 'core/network/network_monitor.dart';
 import 'core/services/user_manager.dart';
@@ -12,7 +13,6 @@ import 'core/utils/task_scheduler.dart';
 Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
-
 
   await AppInitializer.initialize(); // 初始化应用
 

@@ -4,7 +4,11 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../core/network/network_monitor.dart';
+import '../../../../core/services/route_manager.dart';
+import '../../../../core/services/user_manager.dart';
+import '../../../../core/utils/eventManager.dart';
 import '../../../../core/utils/permissionManager.dart';
+import '../../../routes/app_pages.dart';
 import '../../main/views/main_view.dart';
 import '../../maintenance/views/maintenance_view.dart';
 
@@ -17,8 +21,44 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    _subscribeToUnauthorized();
     _subscribeToNetworkStatus();
   }
+
+  /// 订阅 401 错误事件
+  void _subscribeToUnauthorized() {
+    EventManager.instance.subscribe('sessionExpired', (data) {
+      _showUnauthorizedDialog();
+    });
+  }
+
+  /// 显示未授权提示框
+  void _showUnauthorizedDialog() {
+    Get.dialog(
+      AlertDialog(
+        title: Text('Session Expired'),
+        content: Text('Your session has expired. Please log in again.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back(); // 关闭弹窗
+              _redirectToLogin();
+            },
+            child: Text('OK'),
+          ),
+        ],
+      ),
+      barrierDismissible: false, // 禁止点击外部关闭
+    );
+  }
+
+  /// 跳转到登录页
+  void _redirectToLogin() {
+    UserManager().clearUserData(); // 清除用户会话
+    RouteManager.instance.navigateToAndClearStack(Routes.LOGIN); // 跳转到登录页
+  }
+
+
 
   void _subscribeToNetworkStatus() {
     NetworkMonitor().subscribeToNetworkStatus((status) {
@@ -52,6 +92,7 @@ class HomeController extends GetxController {
   @override
   void onClose() {
     NetworkMonitor().dispose(); // 释放监听资源
+    EventManager.instance.unsubscribeAll(); //取消所有的订阅事件
     super.onClose();
   }
 

@@ -6,8 +6,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../network/api_service.dart';
 import '../network/network_monitor.dart';
 import '../utils/logger.dart';
 

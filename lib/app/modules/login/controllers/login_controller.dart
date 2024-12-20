@@ -24,7 +24,7 @@ class LoginController extends GetxController {
       EasyLoading.show(status: 'Logging in...');
 
       try {
-        await ApiService.post(
+        await ApiService().post(
           ApiEndpoints.login,
           data: {
             'phoneNumber': username,

@@ -17,6 +17,7 @@ class UserManager {
   // 用户信息字段
   bool _isLoggedIn = false;
   String? _token;
+  String? _refreshToken;
   String? _username;
 
   /// 获取是否登录（从内存或持久化存储）
@@ -44,6 +45,22 @@ class UserManager {
       await Storage.saveString('user_token', token);
     } else {
       await Storage.remove('user_token');
+    }
+  }
+
+  /// 获取刷新 Token
+  Future<String?> get refreshToken async {
+    _refreshToken = await Storage.getString('refresh_token');
+    return _refreshToken;
+  }
+
+  /// 设置刷新 Token 并持久化
+  Future<void> setRefreshToken(String? refreshToken) async {
+    _refreshToken = refreshToken;
+    if (refreshToken != null) {
+      await Storage.saveString('refresh_token', refreshToken);
+    } else {
+      await Storage.remove('refresh_token');
     }
   }
 
