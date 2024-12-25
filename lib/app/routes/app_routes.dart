@@ -10,6 +10,7 @@ abstract class Routes {
   static const MAINTENANCE = _Paths.MAINTENANCE;
   static const PROFILE = _Paths.PROFILE;
   static const PROFILE_SETTINGS = _Paths.PROFILE_SETTINGS;
+  static const MAIN_DETAILS_PAGE = _Paths.MAIN_DETAILS_PAGE;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const MAINTENANCE = '/maintenance';
   static const PROFILE = '/profile';
   static const PROFILE_SETTINGS = '/profile-settings';
+  static const MAIN_DETAILS_PAGE = '/main-details-page';
 }

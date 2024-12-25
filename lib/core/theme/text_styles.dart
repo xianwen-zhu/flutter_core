@@ -119,9 +119,9 @@ class AppTextStyles {
 
   // 导航栏标题样式
   static final TextStyle appBarTitle = TextStyle(
-    fontSize: 18.sp,
+    fontSize: 16.sp,
     fontWeight: FontWeight.bold,
-    color: AppColors.textPrimary,
+    color: AppColors.surface,
   );
 
   // 输入框文本样式

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_core/app/routes/app_pages.dart';
+import 'package:flutter_core/core/services/route_manager.dart';
 import 'package:flutter_core/core/theme/colors.dart';
 import 'package:flutter_core/core/widgets/base_app_bar_page.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +13,8 @@ class MainView extends GetView<MainController> {
   MainView({Key? key}) : super(key: key);
 
   /// 刷新控制器
-  final RefreshController _refreshController = RefreshController(initialRefresh: false);
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +66,8 @@ class MainView extends GetView<MainController> {
         controller: _refreshController,
         enablePullDown: true,
         onRefresh: _onRefresh,
-        header: const WaterDropHeader(), // 下拉刷新样式
+        header: const WaterDropHeader(),
+        // 下拉刷新样式
         child: ListView(
           padding: EdgeInsets.all(16.sp),
           children: [
@@ -121,10 +125,10 @@ class MainView extends GetView<MainController> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildItem('Success Logs', logData['successLog']),
-                _buildItem('Failed Logs', logData['failedLog']),
-                _buildItem('Fault Logs', logData['faultLog']),
-                _buildItem('Warning Logs', logData['alertLog']),
+                _buildItem('Success', logData['successLog'], title),
+                _buildItem('Failed', logData['failedLog'], title),
+                _buildItem('Fault', logData['faultLog'], title),
+                _buildItem('Warning', logData['alertLog'], title),
               ],
             ),
           ],
@@ -134,26 +138,43 @@ class MainView extends GetView<MainController> {
   }
 
   /// 构建日志数据项
-  Widget _buildItem(String label, int? value) {
-    return Column(
-      children: [
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 12.sp,
-            color: Colors.grey[700],
-          ),
+  Widget _buildItem(String label, int? value, String module) {
+    return GestureDetector(
+      onTap: () {
+        // 跳转到详情页面
+        RouteManager.instance.navigateTo(Routes.MAIN_DETAILS_PAGE, arguments: {
+          'module': module,
+          'label': label,
+          'value': value ?? 0,
+        });
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 10.sp, horizontal: 8.sp), // 增加点击区域的内边距
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.sp), // 增加可视的点击区域样式
+          color: Colors.transparent, // 透明背景，不影响视觉
         ),
-        SizedBox(height: 4.sp),
-        Text(
-          value == null || value == 0 ? '--' : value.toString(),
-          style: TextStyle(
-            fontSize: 14.sp,
-            color: Colors.blue,
-            fontWeight: FontWeight.bold,
-          ),
+        child: Column(
+          children: [
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: Colors.grey[700],
+              ),
+            ),
+            SizedBox(height: 4.sp),
+            Text(
+              value == null || value == 0 ? '--' : value.toString(),
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: Colors.blue,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
